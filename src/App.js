@@ -1,63 +1,36 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import axios from 'axios'
 
 import './App.css'
 
+// const url = 'https://www.metaweather.com/api/location/2487956/'
+const url = 'https://api.met.no/weatherapi/locationforecast/2.0/compact.json?lat=37&lon=-122'
+
+
 const App = () => {
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        axios
+        .get(url)
+        .then((res) => {
+            setData(res.data.properties.timeseries[0].data)
+            console.log(res.data.properties.timeseries[0].data)})
+        .catch((err) => console.error(err))
+    }, [])
+
   return (
     <div className="App">
-      {/* Remove everything from this line to line 37 */}
-      <div className="image-container">
-        <img
-          alt="Lambda loves our llamas!"
-          src="https://assets-global.website-files.com/5cd091cfb5499f22bdf72905/5dcda59e63bb6ae5c9282801_small-red-logo.png"
-        ></img>
-      </div>
-      <h2>
-        Welcome <p className="welcome-bottom">Lambda student!</p>
-      </h2>
-      <h4>Your React Application is Ready</h4>
-      <h4>Now go work your magic!</h4>
-      <p className="filler-text">This is filler, no need to keep it!</p>
-      <div className="footer">
-        <a
-          href="https://lambdaschool.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Visit the Lambda Llama home
-        </a>
-        <br />
-        <div>
-          <p>Created using Create-React-App</p>
-          <p>Modified and maintained by Lambda School graduate Zac Smith</p>
-          <p>
-            <a
-              href="https://github.com/mrzacsmith"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Github
-            </a>{" "}
-            ::{" "}
-            <a
-              href="https://www.npmjs.com/~mrzacsmith"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              NPM
-            </a>{" "}
-            ::{" "}
-            <a
-              href="https://twitter.com/mrzacsmith"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Twitter
-            </a>
-          </p>
-        </div>
-      </div>
-      {/* Remove everything from line 8 to here */}
+     <h1>WEB38 Cool Weather App</h1>
+     <h2>Local Weather for Lambda</h2>
+     <p>{data.instant.details.air_temperature*1.8+32}&#176;</p>
+     <table>
+         <tr>
+             <th>Current Temp</th>
+             <td>{data.instant.details.air_temperature*1.8+32}&#176;</td>
+         </tr>
+     </table>
+
     </div>
   );
 };
